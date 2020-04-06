@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+    <body>
+        {% extends "base.html" %}
+        {% block content %}
+                <h1 class='text-center'>Works log</h1>
+                {% if current_user.is_authenticated %}
+                    <a href="add_job" class="btn btn-secondary">Добавить новость</a>
+                {% endif %}
+                {% for job in jobs %}
+                    <h2>Action #{{job.id}}</h2>
+                    <table class='table'>
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Title of activity</th>
+                                <th scope="col">Team leader</th>
+                                <th scope="col">Duration</th>
+                                <th scope="col">List of collabarators</th>
+                                <th scope="col">Is finished</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{job.job}}
+                                </td>
+                                <td>
+                                    {{t_l[job.id]}}
+                                </td>
+                                <td>
+                                    {{job.work_size}} hours
+                                </td>
+                                <td>
+                                    {{job.collaborators}}
+                                </td>
+                                <td>
+                                    {% if job.is_finished == True %}
+                                        Is finished
+                                    {% else %}
+                                        Is not finished
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% if current_user.is_authenticated and (current_user.id == job.team_leader or current_user.id == 1) %}
+                        <div>
+                            <a href="/edit_job/{{ job.id }}" class="btn btn-warning">Изменить</a>
+                            <a href="/job_delete/{{ job.id }}" class="btn btn-danger">Удалить</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+        {% endblock %}
+    </body>
+</html>

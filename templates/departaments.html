@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+    <body>
+        {% extends "base.html" %}
+        {% block content %}
+                <h1 class='text-center'>List of departaments</h1>
+                {% if current_user.is_authenticated %}
+                    <a href="add_departament" class="btn btn-secondary">Добавить департамент</a>
+                {% endif %}
+                {% for departament in departaments %}
+                    <h2>Departament #{{departament.id}}</h2>
+                    <table class='table'>
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Title of departament</th>
+                                <th scope="col">Chief</th>
+                                <th scope="col">Members</th>
+                                <th scope="col">Departament email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {{departament.title}}
+                                </td>
+                                <td>
+                                    {{chief[departament.id]}}
+                                </td>
+                                <td>
+                                    {{departament.members}}
+                                </td>
+                                <td>
+                                    {{departament.email}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% if current_user.is_authenticated and (current_user.id == departament.chief or current_user.id == 1) %}
+                        <div>
+                            <a href="/edit_departament/{{ departament.id }}" class="btn btn-warning">Изменить</a>
+                            <a href="/departament_delete/{{ departament.id }}" class="btn btn-danger">Удалить</a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+        {% endblock %}
+    </body>
+</html>
